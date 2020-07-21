@@ -27,11 +27,13 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
+ * counter1 is declared within the function scope, counter2 is declared outside of the function scope.
  * 
  * 2. Which of the two uses a closure? How can you tell?
+ * counter1 uses closure because it defines count inside the function scope. 
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
- *
+ *counter1 would give me the ability to create more outer function variables and more reusability. counter2 is helpful if I wanted to change the count throughout the code.
 */
 
 // counter1 code
@@ -56,12 +58,12 @@ function counter2() {
 
 Write a function called `inning` that returns a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
 
-function inning(/*Code Here*/){
-
-    /*Code Here*/
-
+function inning(){
+let score = 0;
+score= Math.floor(Math.random() * 3);
+return score;
 }
-
+console.log (inning());
 /* Task 3: finalScore()
 
 Write a higher order function called `finalScore` that accepts the callback function `inning` (from above) and a number of innings and and returns the final score of the game in the form of an object.
@@ -76,11 +78,18 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
-
-  /*Code Here*/
-
+function finalScore(inning, number) {
+  let scoreHome = 0;
+  let scoreAway = 0;
+  for (let i = 0; i < number; i++) {
+    scoreHome = scoreHome + inning();
+    scoreAway = scoreAway+ inning();
+  }
+  return {Home: scoreHome, Away: scoreAway};
 }
+
+console.log(finalScore(inning, 9));
+
 
 /* Task 4: 
 
@@ -102,9 +111,30 @@ and returns the score at each pont in the game, like so:
 9th inning: awayTeam - homeTeam
 Final Score: awayTeam - homeTeam */
 
-
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function getInningScore(scoreAway, scoreHome, inningNumber) {
+  let suffix = " ";
+  if (inningNumber === 1) {
+    suffix = "st"; 
+  } else if (inningNumber === 2) {
+    suffix = "nd"; 
+  } else if (inningNumber === 3) {
+    suffix = "rd";
+  } else {
+    suffix = "th";
+  }
+  console.log(`${inningNumber}${suffix} inning: ${scoreAway} - ${scoreHome}`);
+  return inningNumber;
 }
 
+function scoreboard(getInningScore, inning, number) {
+  let scoreHome = 0;
+  let scoreAway = 0;
+  for (let i = 0; i < number; i++) {
+    scoreHome = scoreHome + inning();
+    scoreAway = scoreAway+ inning();
+    getInningScore(scoreAway, scoreHome, i+1);
+  }
+  console.log(`Final Score: ${scoreAway} - ${scoreHome}`);
+}
 
+scoreboard(getInningScore, inning, 9);
